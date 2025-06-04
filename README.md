@@ -1,3 +1,3 @@
-# Last Cristmas
+# Last Christmas
 
-## Implementation einer Suchmaschiene
+## Implementation einer Suchmaschine
