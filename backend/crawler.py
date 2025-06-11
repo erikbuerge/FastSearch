@@ -36,7 +36,17 @@ def extract_keywords(text, min_word_length=4, top_n=20):
 
     # Optional: Stopwörter ausschließen (z. B. mit nltk oder eigener Liste)
     stopwords = {
-        "dieser", "diese", "und", "oder", "mit", "eine", "sich", "aber", "für", "auf", "ist"
+        "and", "the", "of", "to", "einer", "eine", "eines", "einem", "einen", "der",
+        "die", "das", "dass", "daß", "du", "er", "sie", "es", "was", "wer", "wie",
+        "wir", "und", "oder", "ohne", "mit", "am", "im", "in", "aus", "auf", "ist",
+        "sein", "war", "wird", "ihr", "ihre", "ihres", "ihnen", "ihrer", "als", "für",
+        "von", "mit", "dich", "dir", "mich", "mir", "mein", "sein", "kein", "durch",
+        "wegen", "wird", "sich", "bei", "beim", "noch", "den", "dem", "zu", "zur",
+        "zum", "auf", "ein", "auch", "werden", "an", "des", "sein", "sind", "vor",
+        "nicht", "sehr", "um", "unsere", "ohne", "so", "da", "nur", "diese", "dieser",
+        "diesem", "dieses", "nach", "über", "mehr", "hat", "bis", "uns", "unser",
+        "unserer", "unserem", "unsers", "euch", "euers", "euer", "eurem", "ihr",
+        "ihres", "ihrer", "ihrem", "alle", "vom"
     }
     filtered = [w for w in words if w not in stopwords]
 
@@ -74,7 +84,7 @@ def crawl(url, depth=1):
                 p_url = db_service.find_url_by_name(url)
                 p_word = db_service.find_word_by_name(word[0])
 
-                db_service.add_link(p_word[0][0], p_url[0][0])
+                db_service.add_link(p_word, p_url[0][0])
 
         # Alle Links auf der Seite extrahieren
         for link in soup.find_all("a", href=True):
