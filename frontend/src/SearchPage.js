@@ -4,17 +4,30 @@ import './App.css';
 import { Link, useSearchParams } from 'react-router-dom';
 
 function SearchPage() {
-    const [result, setResult] = useState([]);
+    const [result, setResult] = useState({});
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [searchParams] = useSearchParams();
     const term = searchParams.get('term') || '';
 
     useEffect(() => {
         if (!term) return;
         setLoading(true);
+        setError('');
         fetch(`http://127.0.0.1:5000/api/search/${encodeURIComponent(term)}`)
             .then(res => res.json())
-            .then(data => setResult(Array.isArray(data) ? data : []))
+            .then(data => {
+                if (
+                    typeof data === 'string' &&
+                    (data === "Search therm not found" || data === "No URLs for the search term")
+                ) {
+                    setError(data);
+                    setResult({});
+                } else {
+                    setResult(typeof data === 'object' && data !== null ? data : {});
+                }
+            })
+            .catch(() => setError('Fehler bei der Anfrage.'))
             .finally(() => setLoading(false));
     }, [term]);
 
@@ -31,15 +44,16 @@ function SearchPage() {
             </div>
             <div className="searchpage-results">
                 <h2>Fast search results for &quot;{term}&quot;</h2>
-                {loading && <p>Lade...</p>}
-                {!loading && result.length === 0 && <p>Keine Ergebnisse gefunden.</p>}
+                {loading && <p>Loading...</p>}
+                {!loading && error && <p style={{ color: 'red' }}>{error}</p>}
+                {!loading && !error && Object.keys(result).length === 0 && <p>Keine Ergebnisse gefunden.</p>}
                 <ul className="results-list">
-                    {result
-                        .filter(url => typeof url === 'string' && url.trim() !== '')
-                        .map((url, idx) => (
+                    {Object.entries(result)
+                        .filter(([url, title]) => typeof url === 'string' && url.trim() !== '')
+                        .map(([url, title], idx) => (
                             <li key={idx} className="result-item">
                                 <a href={url} target="_blank" rel="noopener noreferrer" className="result-link">
-                                    <span className="result-title">{url.replace(/^https?:\/\//, '')}</span>
+                                    <span className="result-title">{title || url.replace(/^https?:\/\//, '')}</span>
                                     <span className="result-url">{url}</span>
                                 </a>
                             </li>
