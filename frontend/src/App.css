@@ -1,38 +1,136 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.search-app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center; /* vertikal zentrieren */
+  align-items: center;     /* horizontal zentrieren */
+  background: #f8f9fa;
+  text-align: center;
+}
+
+.search-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0; /* ggf. entfernen, falls noch margin-top gesetzt ist */
+}
+
+.search-title {
+  font-size: 2.5rem;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  height: 64px; /* gleiche Höhe wie das Logo */
+}
+
+.search-form {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 350px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  border: 2px solid transparent;
+  transition: box-shadow 0.2s, border 0.2s;
+  position: relative;
+  gap: 0; /* ggf. gap anpassen */
 }
 
-.App-link {
-  color: #61dafb;
+.search-form.focused {
+  box-shadow: 0 0 12px 2px #6ec6ff, 0 2px 8px rgba(0,0,0,0.07);
+  border: 2px solid #2196f3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.search-icon {
+  margin-left: 18px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 36px 12px 0; /* rechts Platz für X */
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  background: transparent;
+}
+
+.clear-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.clear-button:hover svg {
+  stroke: #2196f3;
+}
+
+.search-logo {
+  height: 64px;
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.send-button {
+  margin-left: 12px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 0;
+  transition: color 0.2s;
+}
+
+.send-button:hover svg {
+  stroke: #2196f3;
+}
+
+.searchpage-root {
+  padding: 32px;
+}
+
+.searchpage-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.searchpage-logo-title {
+  display: flex;
+  align-items: center;
+  min-width: 220px;
+}
+
+.searchpage-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.searchpage-results {
+  margin-left: 0;
+  margin-top: 0;
 }
