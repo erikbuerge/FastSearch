@@ -34,14 +34,16 @@ function SearchPage() {
                 {loading && <p>Lade...</p>}
                 {!loading && result.length === 0 && <p>Keine Ergebnisse gefunden.</p>}
                 <ul className="results-list">
-                    {result.map((url, idx) => (
-                        <li key={idx} className="result-item">
-                            <a href={url} target="_blank" rel="noopener noreferrer" className="result-link">
-                                <span className="result-title">{url.replace(/^https?:\/\//, '')}</span>
-                                <span className="result-url">{url}</span>
-                            </a>
-                        </li>
-                    ))}
+                    {result
+                        .filter(url => typeof url === 'string' && url.trim() !== '')
+                        .map((url, idx) => (
+                            <li key={idx} className="result-item">
+                                <a href={url} target="_blank" rel="noopener noreferrer" className="result-link">
+                                    <span className="result-title">{url.replace(/^https?:\/\//, '')}</span>
+                                    <span className="result-url">{url}</span>
+                                </a>
+                            </li>
+                        ))}
                 </ul>
             </div>
         </div>
