@@ -1,12 +1,18 @@
+import os
+import dotenv
+
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+
+from flask.cli import load_dotenv
 
 from backend.services import db_service
 import re
 from collections import Counter
 
-start_url = "https://www.heidenheim.dhbw.de"
+load_dotenv()
+start_url = os.getenv('CRAWLER_START_URL')
 visited = set()
 
 def get_visible_text(url):
@@ -78,4 +84,4 @@ def crawl(url, depth=1):
 
 
 # Starten
-crawl(start_url, depth=2)  # Tiefe begrenzen, um Rekursion & Last zu kontrollieren
+crawl(start_url, depth=int(os.getenv('CRAWLER_DEPTH')))  # Tiefe begrenzen, um Rekursion & Last zu kontrollieren

@@ -1,8 +1,12 @@
 from http.client import responses
 
+from flask.cli import load_dotenv
 from sqlalchemy import create_engine, text
+import os
+import dotenv
 
-engine = create_engine("postgresql://santa:claus@localhost:5432/postgres")
+load_dotenv()
+engine = create_engine(os.getenv("DB_CONNECTION_STRING"))
 
 #----- URL -----
 def add_url(url: str):
@@ -43,7 +47,7 @@ def find_url_by_id(url_id: int):
             parameters={'id': url_id}
         )
 
-        rows = sql_response.fetchall()
+        rows = sql_response.fetchall()[0][1]
         if len(rows) != 0:
             return rows
         else:
@@ -78,7 +82,7 @@ def find_word_by_name(word: str):
 
         rows = sql_response.fetchall()
         if len(rows) != 0:
-            return rows
+            return rows[0][0]
         else:
             return None
 
@@ -110,7 +114,7 @@ def find_link_by_word_id(word_id: int):
         )
         connection.commit()
 
-        rows = sql_response.fetchall()
+        rows = sql_response.fetchall()[0]
         if len(rows) != 0:
             return rows
         else:

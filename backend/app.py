@@ -1,6 +1,11 @@
 from flask import Flask, jsonify
-from backend.services import search_service
+from flask.cli import load_dotenv
 
+from backend.services import search_service
+import os
+import dotenv
+
+load_dotenv()
 app = Flask(__name__)
 
 @app.route('/api/info', methods=['GET'])
@@ -12,7 +17,8 @@ def hello():
 
 @app.route('/api/search/<string:search_term>', methods=['GET'])
 def search(search_term: str):
-    return search_service.search_urls_by_therm(search_term)
+    result = search_service.search_by_therm(search_term)
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug=True)
