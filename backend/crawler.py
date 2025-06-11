@@ -13,7 +13,11 @@ from collections import Counter
 
 load_dotenv()
 start_url = os.getenv('CRAWLER_START_URL')
-visited = set(db_service.find_urls_junger_then_one_day())
+visited_raw = db_service.find_urls_junger_then_one_day()
+if visited_raw is None:
+    visited = set()
+else:
+    visited = set(visited_raw)
 
 def get_visible_text(url):
     try:
