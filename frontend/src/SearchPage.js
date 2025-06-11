@@ -49,7 +49,7 @@ function SearchPage() {
                 {!loading && !error && Object.keys(result).length === 0 && <p>Keine Ergebnisse gefunden.</p>}
                 <ul className="results-list">
                     {Object.entries(result)
-                        .filter(([url, title]) => typeof url === 'string' && url.trim() !== '')
+                        .filter(([url]) => typeof url === 'string' && url.trim() !== '')
                         .map(([url, title], idx) => (
                             <li key={idx} className="result-item">
                                 <a href={url} target="_blank" rel="noopener noreferrer" className="result-link">
