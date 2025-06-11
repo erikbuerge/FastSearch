@@ -35,7 +35,9 @@ def extract_keywords(text, min_word_length=4, top_n=20):
     words = re.findall(r'\b[a-zA-ZäöüÄÖÜß]{%d,}\b' % min_word_length, text.lower())
 
     # Optional: Stopwörter ausschließen (z. B. mit nltk oder eigener Liste)
-    stopwords = {"dieser", "diese", "und", "oder", "mit", "eine", "sich", "aber", "für", "auf", "ist"}
+    stopwords = {
+        "dieser", "diese", "und", "oder", "mit", "eine", "sich", "aber", "für", "auf", "ist"
+    }
     filtered = [w for w in words if w not in stopwords]
 
     return Counter(filtered).most_common(top_n)
