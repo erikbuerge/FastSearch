@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
 import './App.css';
 import { Link, useSearchParams } from 'react-router-dom';
+import CrawlerPopup from "./CrawlerPopup";
 
 function SearchPage() {
     const [result, setResult] = useState({});
@@ -33,6 +34,7 @@ function SearchPage() {
 
     return (
         <div className="searchpage-root">
+            <CrawlerPopup />
             <div className="searchpage-bar-row">
                 <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
                     <img src="/icon.png" alt="Logo" className="search-logo" />
