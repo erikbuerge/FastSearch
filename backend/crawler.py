@@ -30,7 +30,7 @@ def get_visible_text(url):
         print(f"Fehler bei {url}: {e}")
         return ""
 
-def extract_keywords(text, min_word_length=4, top_n=20):
+def extract_keywords(text, min_word_length=os.getenv('KEYWORDS_MIN_LENGTH'), top_n=os.getenv('KEYWORDS_MAX_AMOUNT')):
     # Nur Wörter, mind. 4 Zeichen lang
     words = re.findall(r'\b[a-zA-ZäöüÄÖÜß]{%d,}\b' % min_word_length, text.lower())
 

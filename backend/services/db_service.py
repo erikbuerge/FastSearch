@@ -47,9 +47,9 @@ def find_url_by_id(url_id: int):
             parameters={'id': url_id}
         )
 
-        rows = sql_response.fetchall()[0][1]
+        rows = sql_response.fetchall()
         if len(rows) != 0:
-            return rows
+            return rows[0][1]
         else:
             return None
 
