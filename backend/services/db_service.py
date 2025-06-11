@@ -53,6 +53,18 @@ def find_url_by_id(url_id: int):
         else:
             return None
 
+def find_urls_junger_then_one_day():
+    with engine.connect() as connection:
+        sql_response = connection.execute(text(
+            'SELECT * FROM URLS WHERE urls.created_at > NOW() - INTERVAL \'1 day\''),
+        )
+
+    rows = sql_response.fetchall()
+    if len(rows) != 0:
+        return rows
+    else:
+        return None
+
 #----- WORD -----
 
 def add_word(word: str):
