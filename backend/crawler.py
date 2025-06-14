@@ -53,8 +53,8 @@ def extract_keywords(text, min_word_length=os.getenv('KEYWORDS_MIN_LENGTH'), top
         "ihres", "ihrer", "ihrem", "alle", "vom"
     }
     filtered = [w for w in words if w not in stopwords]
-
-    return Counter(filtered).most_common(top_n)
+    #return Counter(filtered).most_common(top_n) #dis broken
+    return filtered
 
 def word_in_db(word: str):
     if db_service.find_word_by_name(word) is not None:
@@ -79,14 +79,15 @@ def crawl(url, depth=1):
         soup = BeautifulSoup(response.text, "html.parser")
 
         # Text magic
-        keywords = extract_keywords(get_visible_text(url), min_word_length=4)
+        vis_text = get_visible_text(url)
+        keywords = extract_keywords(vis_text, min_word_length=4)
 
         for word in keywords:
-            if word_in_db(word[0]) is not True:
-                db_service.add_word(word[0])
+            if word_in_db(word) is not True:
+                db_service.add_word(word)
 
                 p_url = db_service.find_url_by_name(url)
-                p_word = db_service.find_word_by_name(word[0])
+                p_word = db_service.find_word_by_name(word)
 
                 db_service.add_link(p_word, p_url[0][0])
 
@@ -100,4 +101,4 @@ def crawl(url, depth=1):
 
 
 # Starten
-crawl(start_url, depth=int(os.getenv('CRAWLER_DEPTH')))  # Tiefe begrenzen, um Rekursion & Last zu kontrollieren
+crawl(start_url, depth=int(os.getenv('CRAWLER_DEPTH')))
