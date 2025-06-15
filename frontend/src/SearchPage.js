@@ -16,7 +16,12 @@ function SearchPage() {
         setLoading(true);
         setError('');
         fetch(`http://127.0.0.1:5000/api/search/${encodeURIComponent(term)}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Serverfehler: ${res.status} ${res.statusText}`);
+                }
+                return res.json();
+            })
             .then(data => {
                 if (
                     typeof data === 'string' &&
@@ -28,7 +33,9 @@ function SearchPage() {
                     setResult(typeof data === 'object' && data !== null ? data : {});
                 }
             })
-            .catch(() => setError('Fehler bei der Anfrage.'))
+            .catch(err => {
+                setError(err.message || 'Technischer Fehler bei der Anfrage.');
+            })
             .finally(() => setLoading(false));
     }, [term]);
 
