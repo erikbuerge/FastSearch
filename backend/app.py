@@ -1,8 +1,11 @@
+from crypt import methods
+
 from flask import Flask, jsonify
 from flask.cli import load_dotenv
 
 from backend.services import search_service
 from backend.services import url_title_service
+from backend import crawler
 import os
 import dotenv
 from flask_cors import CORS
@@ -26,6 +29,11 @@ def search(search_term: str):
     else:
         urls_with_title = url_title_service.get_titles_from_urls(result)
         return jsonify(urls_with_title)
+
+@app.route('/api/crawler/<string:url>', methods=['GET'])
+def start_crawler(url: str):
+    crawler.start_crawl(url, 2)
+    return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
     app.run(debug=True)

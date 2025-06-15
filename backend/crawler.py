@@ -1,4 +1,6 @@
 import os
+from collections import Counter
+
 import dotenv
 
 import requests
@@ -9,15 +11,8 @@ from flask.cli import load_dotenv
 
 from backend.services import db_service
 import re
-from collections import Counter
 
-load_dotenv()
-start_url = os.getenv('CRAWLER_START_URL')
-visited_raw = db_service.find_urls_junger_then_one_day()
-if visited_raw is None:
-    visited = set()
-else:
-    visited = set(visited_raw)
+visited = set()
 
 def get_visible_text(url):
     try:
@@ -53,7 +48,8 @@ def extract_keywords(text, min_word_length=os.getenv('KEYWORDS_MIN_LENGTH'), top
         "ihres", "ihrer", "ihrem", "alle", "vom"
     }
     filtered = [w for w in words if w not in stopwords]
-    #return Counter(filtered).most_common(top_n) #dis broken
+
+    #return Counter(filtered).most_common(top_n) #fixme: dis broken
     return filtered
 
 def word_in_db(word: str):
@@ -61,6 +57,18 @@ def word_in_db(word: str):
         return True
     else:
         return False
+
+def start_crawl(start_url, depth):
+    load_dotenv()
+    url = "http://"
+    url = url + start_url
+    visited_raw = db_service.find_urls_junger_then_one_day()
+    if visited_raw is None:
+        visited = set()
+    else:
+        visited = set(visited_raw)
+
+    crawl(url, depth)
 
 def crawl(url, depth=1):
     if depth == 0 or url in visited:
@@ -99,6 +107,4 @@ def crawl(url, depth=1):
     except Exception as e:
         print(f"Fehler bei {url}: {e}")
 
-
-# Starten
-crawl(start_url, depth=int(os.getenv('CRAWLER_DEPTH')))
+#start_crawl("https://www.youtube.com", 2)
