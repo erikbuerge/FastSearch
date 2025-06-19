@@ -60,7 +60,7 @@ def word_in_db(word: str):
 
 def start_crawl(start_url, depth):
     load_dotenv()
-    url = "http://"
+    url = "https://"
     url = url + start_url
     visited_raw = db_service.find_urls_junger_then_one_day()
     if visited_raw is None:

@@ -32,7 +32,7 @@ def search(search_term: str):
 
 @app.route('/api/crawler/<string:url>', methods=['GET'])
 def start_crawler(url: str):
-    crawler.start_crawl(url, 2)
+    crawler.start_crawl(url, 4)
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
