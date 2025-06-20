@@ -38,4 +38,13 @@ def start_crawler(url: str):
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #crawler.continuous_crawl()
+    #app.run(debug=True)
+
+    # Thread für die Flask-App
+    flask_thread = threading.Thread(target=app.run)
+    flask_thread.start()
+
+    # Thread für den Crawler
+    crawler_thread = threading.Thread(target=crawler.continuous_crawl())
+    crawler_thread.start()

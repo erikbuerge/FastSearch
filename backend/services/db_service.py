@@ -53,6 +53,13 @@ def find_url_by_id(url_id: int):
         else:
             return None
 
+def update_url_timestamp(url_id: int):
+    with engine.connect() as connection:
+        connection.execute(text(
+            'UPDATE URLS SET created_at = NOW() WHERE id = :id;'),
+            parameters={'id': url_id}
+        )
+
 def find_urls_junger_then_one_day():
     with engine.connect() as connection:
         sql_response = connection.execute(text(
