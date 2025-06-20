@@ -84,7 +84,11 @@ def crawl(url, visited, depth=1):
     if depth == 0 or url in visited:
         return
     try:
-        db_service.add_url(url)
+        db_url = db_service.find_url_by_name(url)
+        if db_url is not None:
+            db_service.update_url_timestamp(db_url[0][0])
+        else:
+            db_service.add_url(url)
     except Exception as e:
         print(f"Fehler beim einfügen in die Datenbank von {url}: {e}")
 
