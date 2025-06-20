@@ -1,16 +1,10 @@
 import os
-from collections import Counter
-
-import dotenv
 import time
-
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-
 from flask.cli import load_dotenv
-
-from backend.services import db_service
+from services import db_service
 import re
 
 def get_visible_text(url):

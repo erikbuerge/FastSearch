@@ -1,6 +1,4 @@
-from flask import jsonify
-
-from backend.services import db_service
+from . import db_service
 
 def search_by_therm(search_therm: str):
     word_id: int = db_service.find_word_by_name(search_therm.lower())

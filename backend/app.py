@@ -1,14 +1,10 @@
 import threading
-from crypt import methods
 
 from flask import Flask, jsonify
 from flask.cli import load_dotenv
 
-from backend.services import search_service
-from backend.services import url_title_service
-from backend import crawler
-import os
-import dotenv
+from services import url_title_service, search_service
+import crawler
 from flask_cors import CORS
 
 load_dotenv()
