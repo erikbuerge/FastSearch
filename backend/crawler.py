@@ -94,10 +94,11 @@ def crawl(url, depth=1):
             if word_in_db(word) is not True:
                 db_service.add_word(word)
 
-                p_url = db_service.find_url_by_name(url)
-                p_word = db_service.find_word_by_name(word)
+            p_url = db_service.find_url_by_name(url)
+            p_word = db_service.find_word_by_name(word)
 
-                db_service.add_link(p_word, p_url[0][0])
+            db_service.add_link(p_word, p_url[0][0])
+
 
         # Alle Links auf der Seite extrahieren
         for link in soup.find_all("a", href=True):
