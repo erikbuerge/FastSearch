@@ -1,0 +1,5 @@
+FastSearch (Projekt/Prüfungsleistung DB-Programmierschnittstellen)
+
+- Abgabe von: Daniel Benfer, Erik Bürge
+- Link zum Github-Repository: https://github.com/erikbuerge/FastSearch
+- Bilder im Ordner 'screenshots' + README.md (für Beschriftung)
