@@ -50,7 +50,7 @@ def word_in_db(word: str):
     else:
         return False
 
-def start_crawl(start_url, depth): #FIXME: test output set
+def start_crawl(start_url, depth):
     load_dotenv()
     url = "https://"
     url = url + start_url
@@ -58,13 +58,13 @@ def start_crawl(start_url, depth): #FIXME: test output set
     if visited_raw is None:
         visited = set()
     else:
-        visited = set(visited_raw) #FIXME: geht net
+        visited = set(visited_raw)
 
     crawl(url=url, visited=visited, depth=depth)
 
 def continuous_crawl():
     while True:
-        urls = db_service.find_urls_older_then_one_day() #FIXME: test output set
+        urls = db_service.find_urls_older_then_one_day()
 
         if urls is not None:
             for url in urls:
