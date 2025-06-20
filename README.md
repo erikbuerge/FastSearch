@@ -31,3 +31,14 @@
 
 After starting the front and backand searches can be executed by using the center searchbar.
 To add urls to the crawler click the spider icon in the top right corner.
+
+## Screenshots
+
+### Website Frontend
+![SC](./screenshots/SC_1.png)
+![SC](./screenshots/SC_2.png)
+![SC](./screenshots/SC_3.png)
+![SC](./screenshots/SC_4.png)
+![SC](./screenshots/SC_5.png)
+![SC](./screenshots/SC_6.png)
+![SC](./screenshots/SC_7.png)
