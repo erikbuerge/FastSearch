@@ -1,3 +1,4 @@
+import threading
 from crypt import methods
 
 from flask import Flask, jsonify
@@ -32,7 +33,8 @@ def search(search_term: str):
 
 @app.route('/api/crawler/<string:url>', methods=['GET'])
 def start_crawler(url: str):
-    crawler.start_crawl(url, 4)
+    thread = threading.Thread(target=crawler.start_crawl, args=(url, 4))
+    thread.start()
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':

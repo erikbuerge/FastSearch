@@ -18,6 +18,6 @@
 ## API Endpoints
 
 - '/api/search/<string:search_term>'
-- /api/crawler/<string:url>
+- '/api/crawler/<string:url>'
 
 ## Implementation einer Suchmaschine

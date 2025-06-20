@@ -2,6 +2,7 @@ import os
 from collections import Counter
 
 import dotenv
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,8 +12,6 @@ from flask.cli import load_dotenv
 
 from backend.services import db_service
 import re
-
-visited = set()
 
 def get_visible_text(url):
     try:
@@ -49,7 +48,6 @@ def extract_keywords(text, min_word_length=os.getenv('KEYWORDS_MIN_LENGTH'), top
     }
     filtered = [w for w in words if w not in stopwords]
 
-    #return Counter(filtered).most_common(top_n) #fixme: dis broken
     return filtered
 
 def word_in_db(word: str):
@@ -58,19 +56,31 @@ def word_in_db(word: str):
     else:
         return False
 
-def start_crawl(start_url, depth):
+def start_crawl(start_url, depth): #FIXME: test output set
     load_dotenv()
     url = "https://"
     url = url + start_url
-    visited_raw = db_service.find_urls_junger_then_one_day()
+    visited_raw = db_service.find_urls_junger_then_one_day_filtered()
     if visited_raw is None:
         visited = set()
     else:
-        visited = set(visited_raw)
+        visited = set(visited_raw) #FIXME: geht net
 
-    crawl(url, depth)
+    crawl(url=url, visited=visited, depth=depth)
 
-def crawl(url, depth=1):
+def continuous_crawl():
+    while True:
+        urls = db_service.find_urls_older_then_one_day() #FIXME: test output set
+
+        if urls is not None:
+            for url in urls:
+                in_url = url[1].split("//")[1]
+                start_crawl(in_url, 2)
+        else:
+            print("Crawler: No urls to crawl")
+            time.sleep(10)
+
+def crawl(url, visited, depth=1):
     if depth == 0 or url in visited:
         return
     try:
@@ -94,17 +104,17 @@ def crawl(url, depth=1):
             if word_in_db(word) is not True:
                 db_service.add_word(word)
 
-            p_url = db_service.find_url_by_name(url)
+            p_url = db_service.find_url_by_name(url)[0][0]
             p_word = db_service.find_word_by_name(word)
 
-            db_service.add_link(p_word, p_url[0][0])
+            db_service.add_link(p_word, p_url)
 
 
         # Alle Links auf der Seite extrahieren
         for link in soup.find_all("a", href=True):
             next_url = urljoin(url, link["href"])
-            if next_url.startswith("http"):
-                crawl(next_url, depth - 1)
+            if next_url.startswith("http") or next_url.startswith("https"):
+                crawl(next_url, visited, depth - 1)
     except Exception as e:
         print(f"Fehler bei {url}: {e}")
 
