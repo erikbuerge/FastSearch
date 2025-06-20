@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-
-import './App.css'
+import './App.css';
+import Spinner from './Spinner';
 
 const CrawlerPopup = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -18,32 +18,33 @@ const CrawlerPopup = () => {
         setMessage('');
     };
 
+    // Polling Funktion
+    const pollCrawler = async (url, interval = 1500, maxAttempts = 30) => {
+        let attempts = 0;
+        while (attempts < maxAttempts) {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/crawler/${url}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setMessage(data.message || 'Crawler started successfully');
+                    setTimeout(() => closePopup(), 2000);
+                    return;
+                }
+            } catch (error) {
+                // Fehler ignorieren, Polling fortsetzen
+            }
+            attempts++;
+            await new Promise(res => setTimeout(res, interval));
+        }
+        setMessage('Timeout: Crawler konnte nicht gestartet werden.');
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/crawl', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    CRAWLER_START_URL: formData.startUrl,
-                    CRAWLER_DEPTH: formData.depth,
-                    KEYWORDS_MIN_LENGTH: formData.minLength,
-                    KEYWORDS_MAX_AMOUNT: formData.maxAmount
-                })
-            });
-
-            if (!response.ok) throw new Error('Request failed');
-            const data = await response.json();
-            setMessage(data.message || 'Crawler started successfully');
-            setTimeout(() => closePopup(), 2000);
-        } catch (error) {
-            setMessage(error.message || 'Error starting crawler');
-        } finally {
-            setLoading(false);
-        }
+        setMessage('');
+        await pollCrawler(formData.startUrl);
+        setLoading(false);
     };
 
     return (
@@ -69,7 +70,7 @@ const CrawlerPopup = () => {
                         <button
                             className="close-btn"
                             aria-label="Close popup"
-                            onClick={() => closePopup()}
+                            onClick={closePopup}
                             type="button"
                         >×</button>
                         <h3>Crawl through website</h3>
@@ -77,47 +78,10 @@ const CrawlerPopup = () => {
                             <div className="form-group">
                                 <label>Start URL</label>
                                 <input
-                                    type="url"
+                                    type="text"
                                     value={formData.startUrl}
-                                    onChange={(e) => setFormData({...formData, startUrl: e.target.value})}
-                                    placeholder="https://www.example.com"
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Crawl depth</label>
-                                <input
-                                    type="number"
-                                    value={formData.depth}
-                                    onChange={(e) => setFormData({...formData, depth: e.target.value})}
-                                    placeholder="2"
-                                    min="1"
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Minimum keyword length</label>
-                                <input
-                                    type="number"
-                                    value={formData.minLength}
-                                    onChange={(e) => setFormData({...formData, minLength: e.target.value})}
-                                    placeholder="4"
-                                    min="1"
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Maximum keywords</label>
-                                <input
-                                    type="number"
-                                    value={formData.maxAmount}
-                                    onChange={(e) => setFormData({...formData, maxAmount: e.target.value})}
-                                    placeholder="60"
-                                    min="1"
-                                    max="100"
+                                    onChange={(e) => setFormData({ ...formData, startUrl: e.target.value })}
+                                    placeholder="www.example.com"
                                     required
                                 />
                             </div>
@@ -125,16 +89,22 @@ const CrawlerPopup = () => {
                             <div className="button-group">
                                 <button
                                     type="button"
-                                    onClick={() => closePopup()}
+                                    onClick={closePopup}
                                     disabled={loading}
                                 >
                                     Cancel
                                 </button>
                                 <button type="submit" disabled={loading}>
-                                    {loading ? 'Starting...' : 'Start Crawler'}
+                                    {loading ? 'Warte auf Server...' : 'Start Crawler'}
                                 </button>
                             </div>
                         </form>
+
+                        {loading && (
+                            <div className="loading-spinner">
+                                <Spinner />
+                            </div>
+                        )}
 
                         {message && <div className="status-message">{message}</div>}
                     </div>
