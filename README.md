@@ -39,6 +39,13 @@ To add urls to the crawler click the spider icon in the top right corner.
 ![SC](./screenshots/SC_2.png)
 ![SC](./screenshots/SC_3.png)
 ![SC](./screenshots/SC_4.png)
+
+### Database
+**URL list extract**
 ![SC](./screenshots/SC_5.png)
+
+**Word list extract**
 ![SC](./screenshots/SC_6.png)
+
+**Word link extract**
 ![SC](./screenshots/SC_7.png)
